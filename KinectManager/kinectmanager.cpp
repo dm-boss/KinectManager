@@ -109,7 +109,9 @@ bool KinectManager::getDepthData() {
 		for(int i=0, didx=0, dstidx=0;i<height;i++) {
 			for(int j=0;j<width;j++, didx++, dstidx+=4) {
 				USHORT depth = NuiDepthPixelToDepth(curr[didx]);
-				
+
+				// clamp at 2047
+
 				if( m == ColorOver ) {
 					long x, y;
 
@@ -118,7 +120,7 @@ bool KinectManager::getDepthData() {
 						j, i, depth<<3, &x, &y);
 
 					unsigned char r, g, b;
-					if (x < 0 || y < 0 || x > width || y > height) {
+					if (x < 0 || y < 0 || x > width || y > height || depth == 0) {
 						r = g = b = 0;
 					}
 					else {
